@@ -12,3 +12,7 @@
 - Add LocaleController
 - Fix Names
 - Edit read me
+
+## [1.1.1]
+
+- add description
