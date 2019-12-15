@@ -19,6 +19,7 @@ import 'package:pq_localization/pq_localization.dart';
       # This method must return material app
       builder: (Locale locale, LocalizationsDelegate delegate) {
         return MaterialApp(
+          locale: locale,
           localizationsDelegates: [
             //...other delegates
             delegate,
@@ -36,7 +37,9 @@ import 'package:pq_localization/pq_localization.dart';
         else
           return {"app_name": "app name"};
       },
-      # what ever locales you want
+      # What ever locales you want
+      # Note that this property is not mapped to default one of material apps
+      # These locales are to define which locales will be used for our delegate
       supportedLocales: <String>["ar","en"],
     );
 ```
@@ -47,9 +50,9 @@ now to access the localizer you cand do this
 PQLocalization.of(context).translate("Key");
 # or you can use this
 
-LocalizationBuilder(
+LocalizedWidgetBuilder(
       builder: (PQLocalization localizer) {
-        Text(localizer.translate("app-name"));
+        Text(localizer.translate("title"));
       },
     );
 ```
@@ -57,22 +60,32 @@ LocalizationBuilder(
 I think you now need to change your locale so you can do like that
 
 ```python
-  LocaleChanger(
-      builder: (Function(Locale locale) setLocaleCallBack) {
-       return Row(
-          children: <Widget>[
-            RaisedButton(
-              onPressed: () {setLocaleCallBack(Locale("ar"));},
-              child: Text("العربية"),
-            ),
-             RaisedButton(
-              onPressed: () {setLocaleCallBack(Locale("en"));},
-              child: Text("الإنجليزية"),
-            ),
-          ],
-        );
-      },
-    );
+        LocaleSwitcher(
+                          builder: (LocaleController controller) {
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ChoiceChip(
+                                  onSelected: (bool v) {
+                                    controller.setLocale(Locale("ar"));
+                                  },
+                                  label: Text("العربية"),
+                                  selected: controller.localeCode == "ar",
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                ChoiceChip(
+                                  onSelected: (bool v) {
+                                    controller.setLocale(Locale("en"));
+                                  },
+                                  label: Text("English"),
+                                  selected: controller.localeCode == "en",
+                                ),
+                              ],
+                            );
+                          },
+                        )
 ```
 
 ## Note

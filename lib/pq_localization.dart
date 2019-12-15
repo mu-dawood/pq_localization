@@ -1,5 +1,3 @@
-library pq_localization;
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -142,11 +140,14 @@ class __InnerAppBuilderState extends State<_InnerAppBuilder> {
   }
 }
 
-class LocaleChanger extends StatelessWidget {
-  final Widget Function(SetLocaleCallBack setLocaleCallBack) builder;
-  const LocaleChanger({Key key, @required this.builder}) : super(key: key);
+class LocaleController {
+  BuildContext context;
+  Locale get locale => PQLocalization.of(context)?.locale;
+  String get localeCode => locale?.languageCode;
 
-  void setLocale(BuildContext context, Locale newLocale) {
+  LocaleController._(this.context);
+
+  void setLocale(Locale newLocale) {
     __InnerAppBuilderState state =
         context.findAncestorStateOfType<__InnerAppBuilderState>();
     if (state == null) {
@@ -158,10 +159,15 @@ class LocaleChanger extends StatelessWidget {
       state.setLocale(newLocale);
     });
   }
+}
+
+class LocaleSwitcher extends StatelessWidget {
+  final Widget Function(LocaleController controller) builder;
+  const LocaleSwitcher({Key key, @required this.builder}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return builder((Locale newLocale) => setLocale(context, newLocale));
+    return builder(LocaleController._(context));
   }
 }
 

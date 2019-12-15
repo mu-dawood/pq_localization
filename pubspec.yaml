@@ -1,10 +1,11 @@
 name: pq_localization
 description: Simple Package to handle localization for flutter
-version: 1.0.0
-homepage:
+version: 1.1.0
+auther: mo.ah.dawood@gmail.com
+homepage: https://github.com/mo-ah-dawood/pq_localization
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
