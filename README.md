@@ -48,8 +48,21 @@ now to access the localizer you cand do this
 
 ```python
 PQLocalization.of(context).translate("Key");
-# or you can use this
+PQLocalization.of(context).translateMany(["Key1","key2"]);
+PQLocalization.of(context).translatePattern(RegExp("^.+$"));
+PQLocalization.of(context).translateManyPattern([RegExp("^[a-z]+$"),RegExp("^[0-9]+$")]);
 
+# The for methods above have an optional parameter called args
+# This parameter replaceing the key with its value in the translated string
+## #example
+# You passed {"(0)":"Mohamed"} in args parameter
+# The  meessage in your resources is "Hello (0) welcome to our app"
+# The translated message will be "Hello Mohamed welcome to our app"
+```
+
+### or you can use this
+
+```python
 LocalizedWidgetBuilder(
       builder: (PQLocalization localizer) {
         Text(localizer.translate("title"));
