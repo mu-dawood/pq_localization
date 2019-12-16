@@ -16,3 +16,10 @@
 ## [1.1.1]
 
 - add description
+
+## [1.2.0]
+
+- add translatePattern
+- add translateManyPattern
+- add translateMany
+- update read me
