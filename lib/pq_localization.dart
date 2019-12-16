@@ -80,9 +80,15 @@ class _PQLocalizationDelegate extends LocalizationsDelegate<PQLocalization> {
   bool shouldReload(_PQLocalizationDelegate old) => reload;
 }
 
+//! builder
 class LocalizedMaterialAppBuilder extends StatelessWidget {
   ///The dfault locale to  be used until load locale from shared prefrences
   final Locale defualtLocale;
+
+  /// when locale changed it will fade out then fade in
+  final bool fadeAnimation;
+
+  final Duration duration;
 
   /// Default widget until  loading locale
   final Widget splashScreen;
@@ -110,6 +116,8 @@ class LocalizedMaterialAppBuilder extends StatelessWidget {
     @required this.supportedLocales,
     @required this.getResources,
     this.reloadResources = false,
+    this.fadeAnimation = true,
+    this.duration = const Duration(milliseconds: 300),
   }) : super(key: key);
 
   @override
@@ -118,7 +126,8 @@ class LocalizedMaterialAppBuilder extends StatelessWidget {
       future: getLocale(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          return _InnerAppBuilder(snapshot.data, builder, delegate);
+          return _InnerAppBuilder(
+              snapshot.data, builder, delegate, fadeAnimation, duration);
         }
         return splashScreen ?? Center(child: CircularProgressIndicator());
       },
@@ -138,16 +147,20 @@ class LocalizedMaterialAppBuilder extends StatelessWidget {
 class _InnerAppBuilder extends StatefulWidget {
   final Locale locale;
   final LocalizationsDelegate<PQLocalization> delegate;
+  final bool fadeAnimation;
+  final Duration duration;
   final MaterialApp Function(
       Locale locale, LocalizationsDelegate<PQLocalization> delegate) builder;
 
-  const _InnerAppBuilder(this.locale, this.builder, this.delegate);
+  const _InnerAppBuilder(this.locale, this.builder, this.delegate,
+      this.fadeAnimation, this.duration);
   @override
   __InnerAppBuilderState createState() => __InnerAppBuilderState();
 }
 
 class __InnerAppBuilderState extends State<_InnerAppBuilder> {
   ValueNotifier<Locale> locale;
+  bool _visible = true;
   @override
   void initState() {
     locale = ValueNotifier(widget.locale);
@@ -156,13 +169,35 @@ class __InnerAppBuilderState extends State<_InnerAppBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(locale.value, widget.delegate);
+    if (widget.fadeAnimation == true)
+      return AnimatedOpacity(
+        onEnd: () {
+          if (_visible == false) {
+            setState(() {
+              _visible = true;
+            });
+          }
+        },
+        duration: widget.duration ?? Duration(milliseconds: 300),
+        opacity: _visible ? 1.0 : 0.0,
+        child: widget.builder(locale.value, widget.delegate),
+      );
+    else
+      return widget.builder(locale.value, widget.delegate);
   }
 
   void setLocale(Locale newLocale) {
-    setState(() {
+    if (widget.fadeAnimation == true) {
+      setState(() {
+        _visible = false;
+      });
       locale.value = newLocale;
-    });
+    } else {
+      setState(() {
+        locale.value = newLocale;
+        _visible = true;
+      });
+    }
   }
 }
 

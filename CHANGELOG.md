@@ -1,10 +1,17 @@
-## [1.0.0] - 23/12/2019
+## [1.2.2]
 
-- initial release.
+- Rebuild app after fading out
 
-## [1.0.1]
+## [1.2.1]
 
--
+- allow animating app while switching locale
+
+## [1.2.0]
+
+- add translatePattern
+- add translateManyPattern
+- add translateMany
+- update read me
 
 ## [1.1.0]
 
@@ -13,13 +20,6 @@
 - Fix Names
 - Edit read me
 
-## [1.1.1]
+## [1.0.0] - 23/12/2019
 
-- add description
-
-## [1.2.0]
-
-- add translatePattern
-- add translateManyPattern
-- add translateMany
-- update read me
+- initial release.
