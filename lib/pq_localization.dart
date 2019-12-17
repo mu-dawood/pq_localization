@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+export 'package:shared_preferences/shared_preferences.dart';
 
 class PQLocalization {
   final Locale _locale;
@@ -161,6 +162,7 @@ class _InnerAppBuilder extends StatefulWidget {
 class __InnerAppBuilderState extends State<_InnerAppBuilder> {
   ValueNotifier<Locale> locale;
   bool _visible = true;
+  Locale _oldLocale;
   @override
   void initState() {
     locale = ValueNotifier(widget.locale);
@@ -175,12 +177,13 @@ class __InnerAppBuilderState extends State<_InnerAppBuilder> {
           if (_visible == false) {
             setState(() {
               _visible = true;
+              _oldLocale = null;
             });
           }
         },
         duration: widget.duration ?? Duration(milliseconds: 300),
         opacity: _visible ? 1.0 : 0.0,
-        child: widget.builder(locale.value, widget.delegate),
+        child: widget.builder(_oldLocale ?? locale.value, widget.delegate),
       );
     else
       return widget.builder(locale.value, widget.delegate);
@@ -190,8 +193,9 @@ class __InnerAppBuilderState extends State<_InnerAppBuilder> {
     if (widget.fadeAnimation == true) {
       setState(() {
         _visible = false;
+        _oldLocale = locale.value;
+        locale.value = newLocale;
       });
-      locale.value = newLocale;
     } else {
       setState(() {
         locale.value = newLocale;

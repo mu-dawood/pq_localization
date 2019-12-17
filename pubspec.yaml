@@ -1,6 +1,6 @@
 name: pq_localization
 description: Simple Package to handle string localization for flutter using key and value pairs like json or simple map
-version: 1.2.2
+version: 1.2.3
 auther: mo.ah.dawood@gmail.com
 homepage: https://github.com/mo-ah-dawood/pq_localization
 
