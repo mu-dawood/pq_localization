@@ -1,3 +1,8 @@
+## [1.2.4]
+
+- add on localeChanged to LocalizedWidgetBuilder
+- remove mixin
+
 ## [1.2.3]
 
 - Rebuild app after fading out

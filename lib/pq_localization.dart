@@ -236,33 +236,45 @@ class LocaleSwitcher extends StatelessWidget {
   }
 }
 
-mixin LocalizationNotifierMixin<T extends StatefulWidget> on State<T> {
+class LocalizedWidgetBuilder extends StatefulWidget {
+  final Widget Function(PQLocalization localizer) builder;
+  final Function(Locale newLOcale) onLocaleChange;
+  const LocalizedWidgetBuilder(
+      {Key key, @required this.builder, this.onLocaleChange})
+      : super(key: key);
+
+  @override
+  _LocalizedWidgetBuilderState createState() => _LocalizedWidgetBuilderState();
+}
+
+class _LocalizedWidgetBuilderState extends State<LocalizedWidgetBuilder> {
+  __InnerAppBuilderState _state;
+  @override
+  Widget build(BuildContext context) {
+    return widget.builder(PQLocalization.of(context));
+  }
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 100)).then((d) {
-      __InnerAppBuilderState state =
-          context.findAncestorStateOfType<__InnerAppBuilderState>();
-      if (state == null) {
+      _state = context.findAncestorStateOfType<__InnerAppBuilderState>();
+      if (_state == null) {
         throw Exception(
             "You should wrap  your  material app   with LocalizedMaterialAppBuilder");
       }
-      state.locale.addListener(onChange);
+      _state.locale.addListener(onChange);
     });
   }
 
   @override
   void dispose() {
-    __InnerAppBuilderState state =
-        context.findAncestorStateOfType<__InnerAppBuilderState>();
-    if (state != null) state.locale.removeListener(onChange);
+    if (_state != null) _state.locale.removeListener(onChange);
     super.dispose();
   }
 
   void onChange() {
     if (!mounted) return;
-    onLocaleChanged();
+    widget.onLocaleChange(_state?.locale?.value);
   }
-
-  void onLocaleChanged();
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:pq_localization/Localized_widget.dart';
 import 'package:pq_localization/pq_localization.dart';
 
 void main() => runApp(
